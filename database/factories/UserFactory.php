@@ -29,7 +29,18 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'isAdmin'=>false
         ];
+    }
+
+    public function withId(int $id): static
+    {
+        return $this->state(function (array $attributes) use ($id) {
+            return [
+                'id' => $id,
+                'isAdmin' => $id === 1 ? true : false, // Csak akkor legyen admin, ha az ID 1
+            ];
+        });
     }
 
     /**

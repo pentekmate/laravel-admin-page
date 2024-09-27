@@ -1,4 +1,7 @@
 <x-layout>
-    @dd($users)
+     {{dd(auth()->user()->isAdmin())}}
     <div class="">HELLO</div>
+    <div>
+        @filters =
+    </div>
 </x-layout>
