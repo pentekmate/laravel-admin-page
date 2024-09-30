@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean('isAdmin');
             $table->rememberToken();
             $table->timestamps();
+            $table->boolean('has2FA');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

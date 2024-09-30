@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -55,5 +57,12 @@ class User extends Authenticatable
 
     public function isAdmin():bool{
         return $this->isAdmin==1;
+    }
+
+    public function scopeHas2FA(Builder $query){
+        return $query->where('has2FA','=','1');
+    }
+    public function scopeIsAdmin(Builder $query){
+        return $query->where('isAdmin','=','1');
     }
 }

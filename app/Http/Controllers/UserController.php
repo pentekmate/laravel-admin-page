@@ -11,13 +11,22 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {   
-        $users = User::all();
+        $query = User::query();
+        $filter=$request->input('filter');
+
+        $query =match($filter){
+            'has_2_FA'=>$query->has2FA(),
+            'is_Admin'=>$query->isAdmin(),
+            default => $query->latest()
+        };
+
+        $users=$query->get();
         $currentDate = Carbon::now()->toDateString();
         $newUsers = User::whereDate('created_at', $currentDate)->count();
 
-        return view('users.index',['users'=>$users,'date'=>$newUsers]);
+        return view('users.index',['users'=>$users,'date'=>$newUsers,'filter'=>$filter]);
     }
 
     /**
@@ -49,7 +58,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return view('Users.edit',['user'=>$user]);
     }
 
     /**
@@ -57,7 +66,18 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $validatedData = $request->validate([
+            'name'=>'string',
+            // 'email'=>'email',
+
+        ]);
+        try{
+            $user->update($validatedData);
+            return redirect()->back()->with('success', 'Felhasználó sikeresen frissítve!');
+        }
+        catch(\Exception $e){
+            return redirect()->back()->with('error', 'Hiba történt a felhasználó frissítése során: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -65,6 +85,12 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+       try{
+            $user->delete();
+            return redirect()->back()->with('success', 'Felhasználó sikeresen törölve!');
+        }
+       catch(\Exception $e){
+            return redirect()->back()->with('error', 'Hiba történt a felhasználó törlése során: ' . $e->getMessage());
+        }
     }
 }
