@@ -37,6 +37,5 @@
     
     @endforelse
 
-    {{$filter}}
 
 </x-layout>

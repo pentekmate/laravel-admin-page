@@ -6,7 +6,7 @@
     @vite('resources/css/app.css')
     <title>Laravel Admin Page</title>
 </head>
-<body class="w-screen ">
+<body class="w-screen bg-[#CBD5E1] ">
     {{$slot}}
 </body>
 </html>

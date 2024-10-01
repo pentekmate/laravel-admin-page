@@ -26,7 +26,9 @@ class UserController extends Controller
         $currentDate = Carbon::now()->toDateString();
         $newUsers = User::whereDate('created_at', $currentDate)->count();
 
-        return view('users.index',['users'=>$users,'date'=>$newUsers,'filter'=>$filter]);
+      
+
+        return view('users.index',['users'=>$users,'date'=>$newUsers]);
     }
 
     /**
@@ -58,7 +60,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('Users.edit',['user'=>$user]);
+        $userOrders = $user->orders;
+        return view('Users.edit',['user'=>$user,'orders'=>$userOrders]);
     }
 
     /**

@@ -10,6 +10,9 @@ class Order extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['product','status','quantity','total','user_id'];
+
+    public static $status = ['Shipped','Completed','Return','Pedding'];
     public function user():BelongsTo{
         return $this->belongsTo(User::class);
     }

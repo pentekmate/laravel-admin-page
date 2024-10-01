@@ -30,5 +30,7 @@
     <p>{{$user->name}}</p>
     <p>{{$user->email}}</p>
     <p>{{$user->has2FA}}</p>
+
+    @dd($orders)
 </body>
 </html>
