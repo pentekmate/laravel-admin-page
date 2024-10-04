@@ -24,6 +24,11 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+    public static $filters =[
+        ''=>'Latest',
+        'has_2_FA'=>'Has 2FA',
+        'is_Admin'=>'Is Admin'
+    ];
 
     /**
      * The attributes that should be hidden for serialization.

@@ -14,12 +14,12 @@ class PostController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if($user->isAdmin){
+        if($user && $user->isAdmin){
             $posts = Post::paginate(10);
         }
         else{
-
-            $posts = $user->posts;
+            $posts = Post::paginate(10);
+            // $posts = $user->posts;
         }
         return view('Posts.index',['posts'=>$posts]);
     }

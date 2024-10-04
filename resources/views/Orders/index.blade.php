@@ -1,34 +1,37 @@
 <x-layout>
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
-    
-    @forelse($orders as $order)
+    <div class="flex flex-col gap-4">
         <div class="flex gap-4">
-            <p>{{$order->product}}</p>
-            <a href="{{route('orders.edit',['order'=>$order])}}">Szerkesztés</a>
-            <form 
-            action="{{route('orders.destroy',['order'=>$order])}}"
-            method="POST"
-            >
-            @csrf
-            @method('delete')
-            <button type="submit">Törlés</button>
-            </form>
+            <x-card title="Total Revenue" :revenue='$totalRevenue'></x-card>
+            <x-card title="Daily Orders" :cardData='$avgOrders'></x-card>
         </div>
-    @empty
-    @endforelse
 
-    <a href="{{route('orders.create')}}">New Order</a>
+        <p class="text-[24px]">Orders</p>
 
-    {{$orders->links()}}
+        <div class="flex justify-end">
+            <x-button route='orders.create'>
+                New Order
+            </x-button>
+        </div>
+
+        <x-message></x-message>
+        <x-table-component 
+        :items="$orders"
+        :columns="[
+            ['field' => 'id', 'label' => 'ID','class'=>'text-center text-[#0EA5E9] font-bold'],
+            ['field' => 'user', 'relation'=>'name', 'label' => 'User','class'=>'text-start ml-[30%]'],
+            ['field' => 'product', 'label' => 'Product','class'=>'ml-[30%]'],
+            ['field' => 'quantity', 'label' => 'Quantity'],
+            ['field' => 'total', 'label' => 'Total'],
+            ['field' => 'status', 'label' => 'Status'],
+        ]"
+        editRoute="orders.edit"
+        deleteRoute="orders.destroy"
+        modelName="order"
+        columnWidths="50px 4fr 2fr 2fr 1fr 1fr 1fr"/>
+    </div>
+
+
+    
+
 
 </x-layout>

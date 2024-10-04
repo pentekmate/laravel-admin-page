@@ -1,41 +1,27 @@
 <x-layout>
+    <div class="flex flex-col gap-4">
+        <div>
+            <x-card title="Current Users" :cardData='count($users)'>
+            asd
+            </x-card>
+        </div>
 
-    <div class="">HELLO</div>
-    
-    <div>
-        @php
-            
-       $filters =[
-            ''=>'Latest',
-            'has_2_FA'=>'Has 2FA',
-            'is_Admin'=>'Is Admin'
-        ]
-        @endphp
-        @foreach ($filters as $key => $label )
-        <a href="{{route('users.index',[...request()->query(),'filter' =>$key])}}">
-            {{$label}}
-        </a>
-            
-        @endforeach
+        <p class="text-[24px]">Users</p>
+
+        <x-table-component 
+        :items="$users"
+        :columns="[
+            ['field' => 'id', 'label' => 'ID','class'=>'text-center text-[#0EA5E9] font-bold'],
+            ['field' => 'name', 'label' => 'Name','class'=>'text-start ml-[35%]'],
+            ['field' => 'email', 'label' => 'Email','class'=>''],
+            ['field' => 'isAdmin', 'label' => 'Admin'],
+            ['field' => 'has2FA', 'label' => '2FA'],
+        ]"
+        editRoute="users.edit"
+        deleteRoute="users.destroy"
+        modelName="user"
+        columnWidths="50px 4fr 2fr 2fr 1fr 1fr"
+        :filters="\App\Models\User::$filters"
+        filterRoute="users.index"/>
     </div>
-
-    @forelse ( $users as $user )
-    <div class="flex gap-4 mt-4">
-        <p> {{$user->name}}</p>
-        <p> {{$user->has2FA}}</p>
-        <p> {{$user->isAdmin===0? 'is not Admin' : 'is Admin'}}</p>
-        <p> {{$user->id}} </p>
-        <p><a href="{{route('users.edit',['user'=>$user])}}">Szerkeszt</a></p>
-        <form action="{{route('users.destroy',['user'=>$user])}}" method="POST">
-        @csrf
-        @method('DELETE')
-            <button type="submit">Törlés</button>
-        </form>
-    </div>
-    @empty
-    <p>No users detected</p>
-    
-    @endforelse
-
-
 </x-layout>

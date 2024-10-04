@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -14,8 +15,25 @@ class OrderController extends Controller
     public function index()
     {
         $orders = Order::paginate(10);
+        $totalRevenue = Order::sum('total');
+        
+        //rendelések napokra csoportositva
+        $dailyOrders = Order::select(DB::raw('DATE(created_at) as order_date'), DB::raw('count(*) as total_orders'))
+        ->groupBy('order_date')
+        ->get();
 
-        return view('Orders.index',['orders'=>$orders]);
+        // Összes rendelés szám
+        $totalOrders = $dailyOrders->sum('total_orders');
+
+        // Napok számának meghatározása
+        $totalDays = $dailyOrders->count();
+
+        // Átlagos rendelés szám
+        $averageOrders = $totalDays > 0 ? $totalOrders / $totalDays : 0;
+
+
+        $orders->load('user');
+        return view('Orders.index',['orders'=>$orders,'totalRevenue'=>$totalRevenue,'avgOrders'=>$averageOrders]);
     }
 
     /**

@@ -26,10 +26,13 @@ class AuthController extends Controller
 
         $credentials = $request->only('email','password');
 
-
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
-            return redirect()->intended('/'); 
+            $user=Auth::user();
+            if($user->isAdmin){
+                return redirect()->route('users.index'); 
+            }
+           return redirect()->route('posts.index'); 
 
         }
         else{

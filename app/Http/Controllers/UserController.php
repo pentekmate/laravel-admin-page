@@ -22,13 +22,13 @@ class UserController extends Controller
             default => $query->latest()
         };
 
-        $users=$query->get();
+        $users=$query->paginate(10);
         $currentDate = Carbon::now()->toDateString();
         $newUsers = User::whereDate('created_at', $currentDate)->count();
 
       
 
-        return view('users.index',['users'=>$users,'date'=>$newUsers]);
+        return view('users.index',['users'=>$users,'date'=>$newUsers,]);
     }
 
     /**
