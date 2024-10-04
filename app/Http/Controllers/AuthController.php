@@ -26,16 +26,16 @@ class AuthController extends Controller
 
         $credentials = $request->only('email','password');
 
+
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
             $user=Auth::user();
-            if($user->isAdmin){
-                return redirect()->route('users.index'); 
+            if ($user->isAdmin) {
+                return redirect()->route('users.index'); // Admin felhasználó esetén
             }
-           return redirect()->route('posts.index'); 
 
-        }
-        else{
+            return redirect()->route('posts.index'); // Nem admin felhasználó esetén
+        } else {
             return redirect()->back()->withErrors([
                 'credentials' => 'Invalid credentials, please try again.',
             ])->withInput();
@@ -46,8 +46,12 @@ class AuthController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        Auth::logout(); 
+        $request->session()->invalidate(); 
+        $request->session()->regenerateToken(); 
+
+        return redirect()->route('login'); // Visszairányít a bejelentkezési oldalra
     }
 }

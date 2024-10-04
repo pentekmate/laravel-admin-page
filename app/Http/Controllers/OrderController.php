@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -14,7 +15,13 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::paginate(10);
+        $user = Auth::user();
+        if($user->isAdmin){
+            $orders = Order::paginate(10);
+        }
+        else{
+            $orders = Order::where('user_id',$user->id)->paginate(10);
+        }
         $totalRevenue = Order::sum('total');
         
         //rendelések napokra csoportositva
@@ -33,7 +40,7 @@ class OrderController extends Controller
 
 
         $orders->load('user');
-        return view('Orders.index',['orders'=>$orders,'totalRevenue'=>$totalRevenue,'avgOrders'=>$averageOrders]);
+        return view('Orders.index',['orders'=>$orders,'totalRevenue'=>$totalRevenue,'avgOrders'=>$averageOrders,'user'=>$user]);
     }
 
     /**
@@ -53,10 +60,9 @@ class OrderController extends Controller
             'product'=>'required|string',
             'quantity'=>'required|integer',
             'total'=>'required|integer',
-            'status'=>'required|string'
+            'status'=>'required|string',
+            'user_id'=>'required'
         ]);
-
-        $validatedData['user_id']=1;
         try{
             Order::create($validatedData);
             return redirect()->back()->with('success', 'Rendelés sikeresen létrehozva!');

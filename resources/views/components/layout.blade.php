@@ -9,11 +9,14 @@
     @vite('resources/css/app.css')
     <title>Laravel Admin Page</title>
 </head>
-<body class="w-screen bg-[#CBD5E1] flex flex-col font-default-font">
+<body class="w-screen overflow-x-hidden bg-[#CBD5E1] flex flex-col font-default-font">
     <x-header></x-header>
-    <div class="flex">
+ 
+    <div class="flex m-0 p-0">
         <x-side-navigator></x-side-navigat>
-        {{$slot}}
+        <div class="w-[1100px]">
+            {{$slot}}
+        </div>
     </div>
 </body>
 </html>

@@ -2,7 +2,6 @@
     <div class="flex flex-col gap-4">
         <div>
             <x-card title="Current Users" :cardData='count($users)'>
-            asd
             </x-card>
         </div>
 

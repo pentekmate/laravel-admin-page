@@ -1,10 +1,11 @@
 <x-layout>
     <div class="flex flex-col gap-4">
-        <div class="flex gap-4">
+        @if ($user->isAdmin)
+        <div class="flex gap-4" >
             <x-card title="Total Revenue" :revenue='$totalRevenue'></x-card>
             <x-card title="Daily Orders" :cardData='$avgOrders'></x-card>
         </div>
-
+        @endif
         <p class="text-[24px]">Orders</p>
 
         <div class="flex justify-end">
@@ -29,9 +30,4 @@
         modelName="order"
         columnWidths="50px 4fr 2fr 2fr 1fr 1fr 1fr"/>
     </div>
-
-
-    
-
-
 </x-layout>

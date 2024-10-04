@@ -9,6 +9,18 @@
             <textarea class="w-3/4 h-[100px] text-[#64748B] px-4 rounded-[4px] border border-[#CBD5E1]"  name="{{$input}}">
             {{ $model ? old($input, $model->$input) : old($input) }}
             </textarea>
+            @elseif ($input==='status')
+            <select  class="w-3/4 h-[36px] text-[#64748B] px-4 rounded-[4px] border border-[#CBD5E1]" name="status" id="status">
+                @foreach (\App\Models\Order::$status as $status)
+                    <option value="{{ $status }}">{{ $status }}</option>
+                @endforeach
+            </select>
+            @elseif ($input==="user")
+               <select  class="w-3/4 h-[36px] text-[#64748B] px-4 rounded-[4px] border border-[#CBD5E1]" name='user_id' id="user_id">
+                    @foreach(\App\Models\User::all() as $user)
+                        <option value="{{ $user->id}}">{{ $user->name === $currentUser->name? 'Me' : $user->name }}</option>
+                    @endforeach
+               </select>
             @else
             <input class="w-3/4 h-[36px] text-[#64748B] px-4 rounded-[4px] border border-[#CBD5E1]"  value="{{$model ? old('$input',$model->$input) : null}}" type="text" name="{{$input}}">
             @endif

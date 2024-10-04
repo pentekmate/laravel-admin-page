@@ -1,7 +1,7 @@
 <div class="w-[1100px] shadow-md rounded-md bg-white">
-    <div class="h-[60px] flex items-end justify-end w-full ">
+    <div class="min-h-[60px] px-4 flex items-center justify-end w-full ">
        @if ($filters)
-        <select onchange="location = this.value">
+        <select class="w-9/4 h-[36px] text-[#64748B] px-4 rounded-[4px] border border-[#CBD5E1]" onchange="location = this.value">
             @foreach ($filters as $key => $label )
             <option value="{{route($filterRoute,[...request()->query(),'filter' =>$key])}}"
             @if (request('filter') === $key) 
@@ -40,6 +40,8 @@
                 <div class="border-b-[0.5px] h-[51px]  flex items-center justify-center  ">
                     @if($column['label']==='Created At')
                     <p class="overflow-hidden w-full h-2/4 {{ $column['class'] ?? 'text-center' }} ">{{ str_replace("-","/",explode(' ',$item[$column['field']])[0])  }}</p>
+                    @elseif ($column['label']==='Status')
+                    <x-status-badge :title="$item[$column['field']]"></x-status-badge>
                     @else
                     <p class="overflow-hidden w-full h-2/4 {{ $column['class'] ?? 'text-center' }} ">
                     @if (array_key_exists('relation', $column) )
@@ -74,5 +76,7 @@
             <p>No items available.</p>
         @endforelse
     </div>
-    {{$items->links()}}
+    @if(isset($items) && $items instanceof \Illuminate\Pagination\LengthAwarePaginator)
+        {{$items->links()}}
+    @endif
 </div>

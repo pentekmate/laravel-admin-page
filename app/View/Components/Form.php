@@ -6,6 +6,7 @@ use App\Models\Post;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class Form extends Component
@@ -34,6 +35,6 @@ class Form extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.form');
+        return view('components.form',['currentUser'=>Auth::user()]);
     }
 }

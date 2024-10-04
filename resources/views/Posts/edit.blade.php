@@ -8,4 +8,6 @@
     :model=$post
     >@method('PUT')
     </x-form>
+
+    
 </x-layout>

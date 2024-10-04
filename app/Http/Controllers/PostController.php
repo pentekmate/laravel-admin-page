@@ -18,8 +18,7 @@ class PostController extends Controller
             $posts = Post::paginate(10);
         }
         else{
-            $posts = Post::paginate(10);
-            // $posts = $user->posts;
+            $posts = Post::where('user_id',$user->id)->paginate(10);
         }
         return view('Posts.index',['posts'=>$posts]);
     }

@@ -1,4 +1,4 @@
-<nav class="w-[240px] px-[20px]">
+<nav class="w-[230px] px-[20px]">
     <p class="text-[20px] text-[#64748B]">Dashboards</p>
     <ul>
         <li class="my-2">

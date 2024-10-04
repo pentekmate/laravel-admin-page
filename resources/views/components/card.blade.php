@@ -1,5 +1,4 @@
-<div >
-    <div class="w-[304px] h-[116px] flex flex-col bg-white shadow-xl rounded-md px-8 py-2 ">
+<div class="w-[304px] h-[116px] flex flex-col bg-white shadow-xl rounded-md px-8 py-2 ">
         <p class="text-[#64748B] font-bold">{{$title}}</p>
         @if ($revenue !==null) 
         <div class="flex gap-2 items-center">
@@ -23,4 +22,3 @@
         </div>
         @endif
     </div>
-</div>
