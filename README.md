@@ -17,3 +17,6 @@ Az alábbi route-ok érhetők el az alkalmazásban:
 - **`/orders`**  
   Ezen az útvonalon a felhasználók láthatják saját rendeléseiket, az adminok pedig az összes rendelést.
   ![Példa](image-2.png)
+
+## Használat
+  Az app használatához, a felhasználóknak be kell lépniük.
