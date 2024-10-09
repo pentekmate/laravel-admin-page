@@ -4,7 +4,9 @@
 
     <p class="text-[24px]">Posts</p>
 
-    <div class="flex justify-end">
+    <div class="flex justify-between items-center">
+        <x-searchbar placeholder="Search by title" name="title" route="{{route('posts.index')}}">
+        </x-searchbar>
         <x-button route='posts.create'>
             New Post
         </x-button>

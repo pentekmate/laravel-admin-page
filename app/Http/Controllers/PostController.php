@@ -6,19 +6,34 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function Symfony\Component\String\b;
+
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-        if($user && $user->isAdmin){
-            $posts = Post::paginate(10);
+        $title = $request->input('title');
+        if($title){
+           if($user->isAdmin){
+                $posts = Post::search($title)->paginate(10);
+           }
+           else{
+                $posts = Post::ownPosts($user->id)
+                ->search($title)
+                ->paginate(10);
+           }
         }
         else{
-            $posts = Post::where('user_id',$user->id)->paginate(10);
+            if($user && $user->isAdmin){
+                $posts = Post::paginate(10);
+            }
+            else{
+                $posts = Post::ownPosts($user->id)->paginate(10);
+            }
         }
         return view('Posts.index',['posts'=>$posts]);
     }

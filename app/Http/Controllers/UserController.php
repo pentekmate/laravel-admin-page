@@ -15,12 +15,21 @@ class UserController extends Controller
     {   
         $query = User::query();
         $filter=$request->input('filter');
+        $name =$request->input('name');
+        if($name){
 
-        $query =match($filter){
-            'has_2_FA'=>$query->has2FA(),
-            'is_Admin'=>$query->isAdmin(),
-            default => $query->latest()
-        };
+            $query = User::when($name,function ($query,$name){
+                return $query->search($name);
+            });
+        }
+        else{
+            $query =match($filter){
+                'has_2_FA'=>$query->has2FA(),
+                'is_Admin'=>$query->isAdmin(),
+                default => $query->latest()
+            };
+        }
+
 
         $users=$query->paginate(10);
         $currentDate = Carbon::now()->toDateString();

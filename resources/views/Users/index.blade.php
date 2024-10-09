@@ -1,4 +1,5 @@
 <x-layout>
+   
     <div class="flex flex-col gap-4">
         <div>
             <x-card title="Current Users" :cardData='count($users)'>
@@ -6,7 +7,11 @@
         </div>
 
         <p class="text-[24px]">Users</p>
+        
+        <x-searchbar placeholder="Search by name" name="name" route="{{route('users.index')}}">
 
+        </x-searchbar>
+        
         <x-table-component 
         :items="$users"
         :columns="[

@@ -13,35 +13,44 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $user = Auth::user();
+    public function index(Request $request){
+    $user = Auth::user();
+    $id = $request->input('id');
+
+    if ($id) {
         if($user->isAdmin){
-            $orders = Order::paginate(10);
+            $orders = Order::search($id)->paginate(10);
         }
         else{
-            $orders = Order::where('user_id',$user->id)->paginate(10);
+            $orders = Order::ownOrders($user->id)->search($id)->paginate(10);
         }
-        $totalRevenue = Order::sum('total');
-        
-        //rendelések napokra csoportositva
-        $dailyOrders = Order::select(DB::raw('DATE(created_at) as order_date'), DB::raw('count(*) as total_orders'))
+    } else {
+        if ($user->isAdmin) {
+            $orders = Order::paginate(10);
+        } else {
+            $orders = Order::where('user_id', $user->id)->paginate(10);
+        }
+        $orders->load('user');
+    }
+
+    $totalRevenue = Order::sum('total');
+
+    // Rendelések napokra csoportosítva
+    $dailyOrders = Order::select(DB::raw('DATE(created_at) as order_date'), DB::raw('count(*) as total_orders'))
         ->groupBy('order_date')
         ->get();
 
-        // Összes rendelés szám
-        $totalOrders = $dailyOrders->sum('total_orders');
+    $totalOrders = $dailyOrders->sum('total_orders');
+    $totalDays = $dailyOrders->count();
+    $averageOrders = $totalDays > 0 ? $totalOrders / $totalDays : 0;
 
-        // Napok számának meghatározása
-        $totalDays = $dailyOrders->count();
-
-        // Átlagos rendelés szám
-        $averageOrders = $totalDays > 0 ? $totalOrders / $totalDays : 0;
-
-
-        $orders->load('user');
-        return view('Orders.index',['orders'=>$orders,'totalRevenue'=>$totalRevenue,'avgOrders'=>$averageOrders,'user'=>$user]);
-    }
+    return view('Orders.index', [
+        'orders' => $orders,
+        'totalRevenue' => $totalRevenue,
+        'avgOrders' => $averageOrders,
+        'user' => $user,
+    ]);
+}
 
     /**
      * Show the form for creating a new resource.

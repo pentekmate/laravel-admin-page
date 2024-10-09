@@ -70,4 +70,8 @@ class User extends Authenticatable
     public function scopeIsAdmin(Builder $query){
         return $query->where('isAdmin','=','1');
     }
+
+    public function scopeSearch(Builder $query,string $name){
+        return $query->where('name','LIKE', '%'. $name. '%');
+    }
 }

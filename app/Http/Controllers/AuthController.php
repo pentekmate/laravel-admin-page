@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -23,11 +24,12 @@ class AuthController extends Controller
             'email'=> 'required|email',
             'password'=>'required'
         ]);
-
+        $remember=$request->input('remember');
         $credentials = $request->only('email','password');
+        
+      
 
-
-        if(Auth::attempt($credentials)){
+        if(Auth::attempt($credentials,$remember)){
             $request->session()->regenerate();
             $user=Auth::user();
             if ($user->isAdmin) {
@@ -37,7 +39,7 @@ class AuthController extends Controller
             return redirect()->route('posts.index'); // Nem admin felhasználó esetén
         } else {
             return redirect()->back()->withErrors([
-                'credentials' => 'Invalid credentials, please try again.',
+                'email' => 'Invalid credentials, please try again.',
             ])->withInput();
         }
     }

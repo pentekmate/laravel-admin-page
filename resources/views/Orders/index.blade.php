@@ -7,8 +7,10 @@
         </div>
         @endif
         <p class="text-[24px]">Orders</p>
-
-        <div class="flex justify-end">
+     
+        <div class="flex justify-between items-center">
+            <x-searchbar placeholder="Search by id" name="id" route="{{route('orders.index')}}">
+            </x-searchbar>
             <x-button route='orders.create'>
                 New Order
             </x-button>
